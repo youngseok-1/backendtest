@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<!--   음료 CRUD를 위한 SQL 쿼리 목록 -->
+
+    <entry key="selectAllDrinkList">
+        SELECT DRK_CODE,
+        DRK_NAME
+        FROM DRINK
+    </entry>
+
+    <entry key="insertDrink">
+        INSERT INTO DRINK
+        (
+        DRK_NAME,
+        PRICE,
+        IS_ZERO,
+        COM_CODE,
+        TYPE_CODE,
+        EXP_DATE,
+        DRK_SIZE
+        )
+        VALUES
+        (
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?
+        )
+    </entry>
+
+    <entry key="updateDrink">
+        UPDATE DRINK
+        SET DRK_NAME = ?,
+        PRICE = ?,
+        IS_ZERO = ?
+        WHERE DRK_CODE = ?
+    </entry>
+
+    <entry key="deleteDrink">
+        DELETE FROM DRINK
+        WHERE DRK_CODE = ?
+    </entry>
+
+</properties>
