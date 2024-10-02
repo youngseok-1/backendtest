@@ -7,11 +7,13 @@
         SELECT DRK_CODE,
         DRK_NAME
         FROM DRINK
+        ORDER BY CAST(SUBSTRING(DRK_CODE, 2) AS UNSIGNED) ASC
     </entry>
 
     <entry key="insertDrink">
         INSERT INTO DRINK
         (
+        DRK_CODE,
         DRK_NAME,
         PRICE,
         IS_ZERO,
@@ -28,21 +30,31 @@
         ?,
         ?,
         ?,
+        ?,
         ?
         )
     </entry>
 
     <entry key="updateDrink">
         UPDATE DRINK
-        SET DRK_NAME = ?,
+        SET
+        DRK_NAME = ?,
         PRICE = ?,
-        IS_ZERO = ?
+        IS_ZERO = ?,
+        COM_CODE = ?,
+        TYPE_CODE = ?,
+        EXP_DATE = ?,
+        DRK_SIZE = ?
         WHERE DRK_CODE = ?
     </entry>
 
     <entry key="deleteDrink">
-        DELETE FROM DRINK
-        WHERE DRK_CODE = ?
+        DELETE FROM DRINK WHERE DRK_CODE = ?
     </entry>
+
+    <entry key="selectLastDrinkCode">
+        SELECT MAX(DRK_CODE) FROM DRINK
+    </entry>
+
 
 </properties>
