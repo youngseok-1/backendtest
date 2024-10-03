@@ -138,6 +138,52 @@ public class DrinkDAO {
         return result;
     }
 
+    public int insertSellRecord(Connection con, String drinkCode, boolean isAvailable) {
+
+        PreparedStatement pstmt = null;
+        int result = 0;
+
+        String query = prop.getProperty("insertSell");
+
+        try {
+            pstmt = con.prepareStatement(query);
+            pstmt.setBoolean(1, isAvailable);
+            pstmt.setString(2, drinkCode);
+
+            result = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(pstmt);
+        }
+
+
+        return  result;
+    }
+    public String selectDrinkCode(Connection con, String drinkCode) {
+        PreparedStatement pstmt = null;
+        ResultSet rset = null;
+        String resultCode = null;
+
+        String query = prop.getProperty("selectDrinkCode");
+
+        try {
+            pstmt = con.prepareStatement(query);
+            pstmt.setString(1, drinkCode);
+            rset = pstmt.executeQuery();
+
+            if (rset.next()) {
+                resultCode = rset.getString("DRK_CODE");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(pstmt);
+            close(rset);
+        }
+
+        return resultCode;
+    }
 
     }
 

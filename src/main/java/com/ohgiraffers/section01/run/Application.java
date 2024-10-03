@@ -22,7 +22,8 @@ public class Application {
             System.out.println("2, 음료 삭제");
             System.out.println("3, 음료 수정");
             System.out.println("4, 음료 전체 조회");
-            System.out.println("5, 프로그램 종료");
+            System.out.println("5, 음료 판매 등록");
+            System.out.println("6, 프로그램 종료");
 
             Scanner sc = new Scanner(System.in);
 
@@ -49,6 +50,10 @@ public class Application {
                     break;
 
                 case 5:
+                    System.out.println("음료 판매를 등록합니다.");
+                    addDrinkToSell();
+                    break;
+                case 6:
                     System.out.println("프로그램을 종료합니다.");
                     System.exit(0);
                     break;
@@ -179,6 +184,39 @@ public class Application {
         close(con);
 
 
+    }
+    public static void addDrinkToSell() {
+        Connection con = getConnection();
+        DrinkDAO dao = new DrinkDAO();
 
+        Scanner sc = new Scanner(System.in);
+
+        // Step 1: 사용자로부터 음료 코드 입력받기
+        System.out.print("판매할 음료의 코드를 입력하세요: ");
+        String drinkCode = sc.nextLine();
+
+        // Step 2: 입력받은 음료 코드가 DRINK 테이블에 있는지 확인
+        String existingDrinkCode = dao.selectDrinkCode(con, drinkCode);
+
+        if (existingDrinkCode == null) {
+            System.out.println("해당 음료 코드는 존재하지 않습니다.");
+            return;
+        }
+
+        // Step 3: 재고 여부 입력받기
+        System.out.print("재고가 있는지 여부를 입력하세요 (Y/N): ");
+        boolean isAvailable = sc.nextLine().equalsIgnoreCase("Y");
+
+        // Step 4: SELL 테이블에 음료 추가
+        int result = dao.insertSellRecord(con, drinkCode, isAvailable);
+
+        if (result > 0) {
+            System.out.println("음료 판매 정보가 성공적으로 추가되었습니다.");
+        } else {
+            System.out.println("음료 판매 정보 추가에 실패했습니다.");
+        }
+
+        close(con);
     }
 }
+

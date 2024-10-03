@@ -56,5 +56,24 @@
         SELECT MAX(DRK_CODE) FROM DRINK
     </entry>
 
+    <entry key="insertSell">
+        INSERT INTO SELL
+        (
+        IS_AVA,
+        DRK_CODE
+        )
+        VALUES
+        (
+        ?,
+        ?
+        )
+    </entry>
+
+    <entry key="selectDrinkCode">
+        SELECT DRK_CODE
+        FROM DRINK
+        WHERE DRK_CODE = ?
+    </entry>
+
 
 </properties>
