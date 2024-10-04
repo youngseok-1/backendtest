@@ -1,6 +1,7 @@
 package com.ohgiraffers.section01.model.dao;
 
 import com.ohgiraffers.section01.model.dto.DrinkDTO;
+import com.ohgiraffers.section01.model.dto.SellDTO;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import static com.ohgiraffers.common.JDBCTemplate.close;
 
 public class DrinkDAO {
 
-    private Properties prop = new Properties();
+    private static Properties prop = new Properties();
 
     public DrinkDAO() {
         try {
@@ -185,6 +186,59 @@ public class DrinkDAO {
         return resultCode;
     }
 
+
+    public List<SellDTO> selectSellDrinkList(Connection con) {
+
+        Statement stmt = null;
+        ResultSet rset = null;
+
+        List<SellDTO> selectSellDrinkList = new ArrayList<>();
+        String query = prop.getProperty("selectSellDrinkList");
+
+        try {
+            stmt = con.createStatement();
+            rset = stmt.executeQuery(query);
+
+            while (rset.next()) {
+                String sellCode = rset.getString("SELL_CODE");
+                String isAvailable = rset.getString("IS_AVA");
+                String drinkCode = rset.getString("DRK_CODE");
+
+                SellDTO sellDTO = new SellDTO(sellCode, isAvailable, drinkCode);
+                selectSellDrinkList.add(sellDTO);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(stmt);
+            close(rset);
+        }
+        return selectSellDrinkList;
+    }
+
+    public static int deleteSell(Connection con, String deleteSellDrink) {
+
+        PreparedStatement pstmt = null;
+        int result = 0;
+
+        String query = prop.getProperty("deleteSell");
+
+        try {
+            pstmt = con.prepareStatement(query);
+
+            pstmt.setString(1, deleteSellDrink);
+
+            result = pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(pstmt);
+        }
+
+
+        return result;
+    }
     }
 
 

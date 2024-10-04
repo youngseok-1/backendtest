@@ -4,7 +4,8 @@
 <!--   음료 CRUD를 위한 SQL 쿼리 목록 -->
 
     <entry key="selectAllDrinkList">
-        SELECT DRK_CODE,
+        SELECT
+        DRK_CODE,
         DRK_NAME
         FROM DRINK
         ORDER BY CAST(SUBSTRING(DRK_CODE, 2) AS UNSIGNED) ASC
@@ -73,6 +74,18 @@
         SELECT DRK_CODE
         FROM DRINK
         WHERE DRK_CODE = ?
+    </entry>
+
+    <entry key="selectSellDrinkList">
+        SELECT
+        SELL_CODE,
+        IS_AVA,
+        DRK_CODE
+        FROM SELL
+    </entry>
+
+    <entry key="deleteSell">
+        DELETE FROM SELL WHERE SELL_CODE = ?
     </entry>
 
 

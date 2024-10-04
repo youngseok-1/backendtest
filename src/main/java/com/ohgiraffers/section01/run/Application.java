@@ -2,6 +2,7 @@ package com.ohgiraffers.section01.run;
 
 import com.ohgiraffers.section01.model.dao.DrinkDAO;
 import com.ohgiraffers.section01.model.dto.DrinkDTO;
+import com.ohgiraffers.section01.model.dto.SellDTO;
 
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -18,12 +19,14 @@ public class Application {
 
         while (true) {
             System.out.println("========음료 관리 페이지========");
-            System.out.println("1, 음료 추가");
-            System.out.println("2, 음료 삭제");
-            System.out.println("3, 음료 수정");
-            System.out.println("4, 음료 전체 조회");
-            System.out.println("5, 음료 판매 등록");
-            System.out.println("6, 프로그램 종료");
+            System.out.println("1. 음료 추가");
+            System.out.println("2. 음료 삭제");
+            System.out.println("3. 음료 수정");
+            System.out.println("4. 음료 전체 조회");
+            System.out.println("5. 음료 판매 등록");
+            System.out.println("6. 판매중인 음료 조회");
+            System.out.println("7. 판매 음료 삭제");
+            System.out.println("8. 프로그램 종료");
 
             Scanner sc = new Scanner(System.in);
 
@@ -54,6 +57,13 @@ public class Application {
                     addDrinkToSell();
                     break;
                 case 6:
+                    selectSellDrinkList();
+                    break;
+                case 7:
+                    System.out.println("판매중인 음료를 삭제합니다.");
+                    deleteSell();
+                    break;
+                case 8:
                     System.out.println("프로그램을 종료합니다.");
                     System.exit(0);
                     break;
@@ -191,11 +201,11 @@ public class Application {
 
         Scanner sc = new Scanner(System.in);
 
-        // Step 1: 사용자로부터 음료 코드 입력받기
+        // 사용자로부터 음료 코드 입력받기
         System.out.print("판매할 음료의 코드를 입력하세요: ");
         String drinkCode = sc.nextLine();
 
-        // Step 2: 입력받은 음료 코드가 DRINK 테이블에 있는지 확인
+        //  입력받은 음료 코드가 DRINK 테이블에 있는지 확인
         String existingDrinkCode = dao.selectDrinkCode(con, drinkCode);
 
         if (existingDrinkCode == null) {
@@ -203,11 +213,11 @@ public class Application {
             return;
         }
 
-        // Step 3: 재고 여부 입력받기
+        //  재고 여부 입력받기
         System.out.print("재고가 있는지 여부를 입력하세요 (Y/N): ");
         boolean isAvailable = sc.nextLine().equalsIgnoreCase("Y");
 
-        // Step 4: SELL 테이블에 음료 추가
+        //  SELL 테이블에 음료 추가
         int result = dao.insertSellRecord(con, drinkCode, isAvailable);
 
         if (result > 0) {
@@ -218,5 +228,41 @@ public class Application {
 
         close(con);
     }
-}
+
+    public static void selectSellDrinkList() {
+
+        Connection con = getConnection();
+
+        DrinkDAO dao = new DrinkDAO();
+        List<SellDTO> sellList = dao.selectSellDrinkList(con);
+
+        for (SellDTO sell : sellList) {
+            System.out.println("판매코드: " + sell.getSellCode() +
+                              ", 재고여부:" + sell.getIsAvailable() +
+                              ", 음료코드:" + sell.getDrinkCode());
+            }
+        close(con);
+        }
+
+    public static void deleteSell() {
+        Connection con = getConnection();
+        DrinkDAO dao = new DrinkDAO();
+
+        // 사용자로부터 삭제할 음료 코드 입력받기
+        Scanner sc = new Scanner(System.in);
+        System.out.print("삭제할 판매코드를 입력해주세요 : ");
+        String deleteSellDrink = sc.nextLine();
+
+        // DAO를 통해 판매 삭제
+        int result = dao.deleteSell(con, deleteSellDrink);
+
+        if (result > 0) {
+            System.out.println("판매 정보 삭제 성공!");
+        } else {
+            System.out.println("판매 정보 삭제 실패! 판매 코드를 확인해주세요");
+        }
+        close(con);
+    }
+    }
+
 
