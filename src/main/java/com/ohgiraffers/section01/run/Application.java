@@ -259,7 +259,7 @@ public class Application {
         if (result > 0) {
             System.out.println("판매 정보 삭제 성공!");
         } else {
-            System.out.println("판매 정보 삭제 실패! 판매 코드를 확인해주세요");
+            System.out.println("판매 정보 삭제 실패! 판매 코드를 확인해주세요!");
         }
         close(con);
     }
